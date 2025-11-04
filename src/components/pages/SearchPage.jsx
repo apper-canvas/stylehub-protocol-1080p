@@ -28,17 +28,7 @@ const SearchPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await productService.getAll();
-      
-      // Filter products based on search query
-      const searchResults = data.filter(product =>
-        product.title.toLowerCase().includes(query.toLowerCase()) ||
-        product.brand.toLowerCase().includes(query.toLowerCase()) ||
-        product.category.toLowerCase().includes(query.toLowerCase()) ||
-        product.subcategory?.toLowerCase().includes(query.toLowerCase()) ||
-        product.description?.toLowerCase().includes(query.toLowerCase()) ||
-        product.tags?.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
-      );
+const searchResults = await productService.search(query);
       
       setProducts(searchResults);
       setFilteredProducts(searchResults);
@@ -149,7 +139,7 @@ const SearchPage = () => {
   };
 
   // Get unique values for filter options
-  const categories = [...new Set(products.map(p => p.category))];
+const categories = [...new Set(products.map(p => p.category))];
   const brands = [...new Set(products.map(p => p.brand))];
 
   const sortOptions = [

@@ -1,0 +1,146 @@
+{
+  "/": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Homepage is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/products": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Products page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/category/*": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Category pages are public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/product/*": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Product detail pages are public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/search": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Search page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/cart": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Cart is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/wishlist": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Wishlist is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/sale": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Sale page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/login": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Login page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/signup": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Signup page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/callback": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Callback page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  },
+  "/error": {
+    "allow": {
+      "when": {
+        "conditions": [
+          {
+            "label": "Error page is public",
+            "rule": "public"
+          }
+        ]
+      }
+    }
+  }
+}

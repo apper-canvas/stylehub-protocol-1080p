@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
+import Root from "@/layouts/Root";
+import { getRouteConfig } from "./route.utils";
 import Layout from "@/components/organisms/Layout";
 
-// Lazy load all page components
+// Lazy load components for better performance
 const HomePage = lazy(() => import("@/components/pages/HomePage"));
 const ProductsPage = lazy(() => import("@/components/pages/ProductsPage"));
 const CategoryPage = lazy(() => import("@/components/pages/CategoryPage"));
@@ -10,6 +12,12 @@ const ProductDetailPage = lazy(() => import("@/components/pages/ProductDetailPag
 const SearchPage = lazy(() => import("@/components/pages/SearchPage"));
 const CartPage = lazy(() => import("@/components/pages/CartPage"));
 const WishlistPage = lazy(() => import("@/components/pages/WishlistPage"));
+const Login = lazy(() => import("@/components/pages/Login"));
+const Signup = lazy(() => import("@/components/pages/Signup"));
+const Callback = lazy(() => import("@/components/pages/Callback"));
+const ErrorPage = lazy(() => import("@/components/pages/ErrorPage"));
+const ResetPassword = lazy(() => import("@/components/pages/ResetPassword"));
+const PromptPassword = lazy(() => import("@/components/pages/PromptPassword"));
 const NotFound = lazy(() => import("@/components/pages/NotFound"));
 
 // Loading fallback component
@@ -23,90 +31,124 @@ const LoadingFallback = () => (
     </div>
   </div>
 );
-
 // Main routes configuration
+// createRoute helper function
+const createRoute = ({
+  path,
+  index,
+  element,
+  access,
+  children,
+  ...meta
+}) => {
+  // Get config for this route
+  let configPath;
+  if (index) {
+    configPath = "/";
+  } else {
+    configPath = path.startsWith('/') ? path : `/${path}`;
+  }
+
+  const config = getRouteConfig(configPath);
+  const finalAccess = access || config?.allow;
+
+  const route = {
+    ...(index ? { index: true } : { path }),
+    element: element ? <Suspense fallback={<LoadingFallback />}>{element}</Suspense> : element,
+    handle: {
+      access: finalAccess,
+      ...meta,
+    },
+  };
+
+  if (children && children.length > 0) {
+    route.children = children;
+  }
+
+  return route;
+};
+
+// Main app routes
 const mainRoutes = [
-  {
-    path: "",
+  createRoute({
     index: true,
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <HomePage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <HomePage />
+  }),
+  createRoute({
     path: "products",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <ProductsPage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <ProductsPage />
+  }),
+  createRoute({
     path: "category/:category",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <CategoryPage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <CategoryPage />
+  }),
+  createRoute({
     path: "product/:id",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <ProductDetailPage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <ProductDetailPage />
+  }),
+  createRoute({
     path: "search",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <SearchPage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <SearchPage />
+  }),
+  createRoute({
     path: "cart",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <CartPage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <CartPage />
+  }),
+  createRoute({
     path: "wishlist",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <WishlistPage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <WishlistPage />
+  }),
+  createRoute({
     path: "sale",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <ProductsPage />
-      </Suspense>
-    ),
-  },
-  {
+    element: <ProductsPage />
+  }),
+  createRoute({
     path: "*",
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <NotFound />
-      </Suspense>
-    ),
-  },
+    element: <NotFound />
+  }),
+];
+
+// Authentication routes
+const authRoutes = [
+  createRoute({
+    path: "login",
+    element: <Login />
+  }),
+  createRoute({
+    path: "signup",
+    element: <Signup />
+  }),
+  createRoute({
+    path: "callback",
+    element: <Callback />
+  }),
+  createRoute({
+    path: "error",
+    element: <ErrorPage />
+  }),
+  createRoute({
+    path: "reset-password/:appId/:fields",
+    element: <ResetPassword />
+  }),
+  createRoute({
+    path: "prompt-password/:appId/:emailAddress/:provider",
+    element: <PromptPassword />
+  }),
 ];
 
 // Router configuration
 const routes = [
   {
     path: "/",
-    element: <Layout />,
-    children: [...mainRoutes],
+    element: <Root />,
+    children: [
+      {
+        path: "/",
+        element: <Layout />,
+        children: [...mainRoutes],
+      },
+      ...authRoutes,
+    ],
   },
 ];
 

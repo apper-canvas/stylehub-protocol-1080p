@@ -26,7 +26,7 @@ const ProductsPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await productService.getAll();
+const data = await productService.getAll();
       setProducts(data);
       setFilteredProducts(data);
     } catch (err) {
@@ -139,7 +139,7 @@ const ProductsPage = () => {
   };
 
   // Get unique values for filter options
-  const categories = [...new Set(products.map(p => p.category))];
+const categories = [...new Set(products.map(p => p.category))];
   const brands = [...new Set(products.map(p => p.brand))];
 
   const sortOptions = [

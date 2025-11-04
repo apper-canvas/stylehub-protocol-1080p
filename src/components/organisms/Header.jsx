@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useAuth } from "@/layouts/Root";
 import SearchBar from "@/components/molecules/SearchBar";
 import ApperIcon from "@/components/ApperIcon";
 import { useCart } from "@/hooks/useCart";
@@ -8,7 +10,9 @@ import { useWishlist } from "@/hooks/useWishlist";
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { cartCount } = useCart();
+const { cartCount } = useCart();
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { logout } = useAuth();
   const { wishlistCount } = useWishlist();
 
   const categories = [
@@ -59,7 +63,7 @@ const Header = () => {
           </div>
 
           {/* Right Actions */}
-          <div className="flex items-center space-x-4">
+<div className="flex items-center space-x-4">
             {/* Search Icon - Mobile */}
             <button className="md:hidden text-secondary hover:text-primary">
               <ApperIcon name="Search" size={24} />
@@ -90,6 +94,30 @@ const Header = () => {
                 </span>
               )}
             </Link>
+
+            {/* Authentication Actions */}
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                <span className="hidden md:block text-sm text-gray-600">
+                  Welcome, {user?.firstName || 'User'}
+                </span>
+                <button
+                  onClick={logout}
+                  className="text-secondary hover:text-primary transition-colors flex items-center space-x-1"
+                >
+                  <ApperIcon name="LogOut" size={20} />
+                  <span className="hidden md:block text-sm">Logout</span>
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="text-secondary hover:text-primary transition-colors flex items-center space-x-1"
+              >
+                <ApperIcon name="LogIn" size={20} />
+                <span className="hidden md:block text-sm">Login</span>
+              </Link>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button

@@ -26,11 +26,7 @@ const CategoryPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await productService.getAll();
-      // Filter products by category
-      const categoryProducts = data.filter(product => 
-        product.category.toLowerCase() === category.toLowerCase()
-      );
+const categoryProducts = await productService.getByCategory(category);
       setProducts(categoryProducts);
       setFilteredProducts(categoryProducts);
     } catch (err) {
@@ -132,7 +128,7 @@ const CategoryPage = () => {
   };
 
   // Get unique values for filter options
-  const subcategories = [...new Set(products.map(p => p.subcategory).filter(Boolean))];
+const subcategories = [...new Set(products.map(p => p.subcategory).filter(Boolean))];
   const brands = [...new Set(products.map(p => p.brand))];
 
   const sortOptions = [
